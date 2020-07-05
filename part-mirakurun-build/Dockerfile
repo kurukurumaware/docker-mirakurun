@@ -11,6 +11,6 @@ RUN npm install -g --unsafe-perm --production
 
 FROM scratch
 
-WORKDIR /cpoydir/app
-COPY --from=Mirakurun-build /usr/local/lib/node_modules/mirakurun /cpoydir/app
+WORKDIR /copydir/app
+COPY --from=Mirakurun-build /usr/local/lib/node_modules/mirakurun /copydir/app
 
