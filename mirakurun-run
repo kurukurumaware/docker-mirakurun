@@ -1,0 +1,23 @@
+#!/bin/ash
+
+export LOG_LEVEL=${LOG_LEVEL:-"2"}
+
+export SERVER_CONFIG_PATH=/app-config/server.yml
+export TUNERS_CONFIG_PATH=/app-config/tuners.yml
+export CHANNELS_CONFIG_PATH=/app-config/channels.yml
+export SERVICES_DB_PATH=/app-data/services.yml
+export PROGRAMS_DB_PATH=/app-data/programs.yml
+export DOCKER=YES
+
+cd /app
+
+# mirakurun起動前に何か実行したいスクリプトがあればここで実行
+if [ -e "/app-config/start.sh" ]; then
+  /app-config/start.sh
+fi
+
+if [ "$DEBUG" != "true" ]; then
+  npm run start
+else
+  npm run debug
+fi
