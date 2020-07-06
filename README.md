@@ -1,7 +1,12 @@
 
 # Docker上にMirakurunを構築
 
-## コンテナの起動準備
+## 起動準備
+
+TVチューナーのデバイスドライバはホストPCに組み込んであるものとする。スマートカードリーダーのサーバーであるpcscd を本体にインストールする。  
+ホストPCにpcscd をインストールしたくない場合は、docker化した  
+[kurukurumaware/b-cas-server](https://hub.docker.com/repository/docker/kurukurumaware/b-cas-server)
+を起動する。
 
 ### ホストPCにディレクトリを作成
 
