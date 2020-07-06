@@ -71,9 +71,6 @@ docker run -it  --rm \
 version: "3.7"
 services:
   mirakurun:
-    build:
-      context: ./
-      dockerfile: Dockerfile
     image: kurukurumaware/mirakurun:latest
     container_name: mirakurun
     cap_add:
