@@ -27,7 +27,6 @@ RUN cat conf/dvbv5_channels_isdbt.conf dvbv5_channels_isdbs.conf \
     | tee /root/.tzap/channels.conf
 
 COPY mirakurun-run /app/mirakurun-run
-RUN chmod +x /copydir/app/mirakurun-run
 
 RUN echo "\
     /usr/share/zoneinfo/Asia/Tokyo \
