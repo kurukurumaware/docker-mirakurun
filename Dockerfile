@@ -22,7 +22,7 @@ COPY --from=part-arib-b25-stream-test /copydir /copydir
 
 WORKDIR /tmp
 RUN mkdir -p /root/.tzap
-RUN curl -fsSL https://github.com/Chinachu/dvbconf-for-isdb/tarball/master | tar -zx --strip-components=1
+RUN curl -fsSL https://github.com/Chinachu/dvbconf-for-isdb/archive/master.tar.gz | tar -zx --strip-components=1
 RUN cat conf/dvbv5_channels_isdbt.conf dvbv5_channels_isdbs.conf \
     | tee /root/.tzap/channels.conf
 
