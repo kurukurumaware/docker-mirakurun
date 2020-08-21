@@ -12,7 +12,7 @@ RUN set -eux \
 ADD https://raw.githubusercontent.com/kurukurumaware/extlibcp/master/extlibcp /usr/local/bin
 RUN chmod +x /usr/local/bin/extlibcp
 RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
-RUN echo "Asia/Tokyo" > /etc/timezon
+RUN echo "Asia/Tokyo" > /etc/timezone
 
 RUN extlibcp "/usr/bin/dvbv5-zap /usr/bin/dvbv5-scan" /copydir
 
