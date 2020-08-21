@@ -6,31 +6,36 @@ FROM kurukurumaware/part-arib-b25-stream-test AS part-arib-b25-stream-test
 
 FROM alpine:3.12 AS mirakurun-work
 
-WORKDIR /tmp
-RUN apk add  --no-cache bash curl tzdata v4l-utils-dvbv5 
-RUN cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
-RUN echo "Asia/Tokyo" > /etc/timezone
-ADD https://raw.githubusercontent.com/kurukurumaware/DockerTools/master/extractlibrary \
-    /usr/local/bin/extractlibrary
-RUN chmod +x /usr/local/bin/extractlibrary
+RUN set -eux \
+    && apk update \
+    && apk add --no-cache bash curl tzdata v4l-utils-dvbv5
+ADD https://raw.githubusercontent.com/kurukurumaware/extlibcp/master/extlibcp /usr/local/bin
+RUN chmod +x /usr/local/bin/extlibcp
+RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+RUN echo "Asia/Tokyo" > /etc/timezon
 
-RUN echo /usr/bin/dvbv5-zap >> binlist
-RUN echo /usr/bin/dvbv5-scan >> binlist
-RUN extractlibrary binlist /copydir
+RUN extlibcp "/usr/bin/dvbv5-zap /usr/bin/dvbv5-scan" /copydir
 
 COPY --from=part-mirakurun /copydir /copydir
 COPY --from=part-recpt1 /copydir /copydir
 COPY --from=part-arib-b25-stream-test /copydir /copydir
-RUN cp --archive --parents --no-dereference /etc/localtime /copydir
-RUN cp --archive --parents --no-dereference /etc/timezone /copydir
 
-RUN mkdir -p /copydir/root/.tzap
+WORKDIR /tmp
+RUN mkdir -p /root/.tzap
 RUN curl -fsSL https://github.com/Chinachu/dvbconf-for-isdb/tarball/master | tar -zx --strip-components=1
 RUN cat conf/dvbv5_channels_isdbt.conf dvbv5_channels_isdbs.conf \
-    | tee /copydir/root/.tzap/channels.conf
+    | tee /root/.tzap/channels.conf
 
-COPY mirakurun-run /copydir/app/mirakurun-run
+COPY mirakurun-run /app/mirakurun-run
 RUN chmod +x /copydir/app/mirakurun-run
+
+RUN echo "\
+    /usr/share/zoneinfo/Asia/Tokyo \
+    /etc/localtime \
+    /etc/timezone \
+    /app/mirakurun-run \
+    /root/.tzap/channels.conf \
+    "|xargs -n1|xargs -I{} cp --archive --parents --no-dereference {} /copydir
 
 # 本体
 FROM node:14.4.0-alpine3.12
